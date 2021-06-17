@@ -1,0 +1,28 @@
+{
+  "name": "longdo-map-react-native",
+  "version": "1.0.0",
+  "description": "Longdo Map component for React Native",
+  "author": "TK <tanawat@mm.co.th>",
+  "private": true,
+  "files": [
+    "*",
+    "!example"
+  ],
+  "scripts": {
+    "sync": "rsync -r --include='index.js' --include='src/***' --exclude='*' . example/node_modules/longdo-map-react-native; touch example/App.js"
+  },
+  "dependencies": {
+    "react-native-webview": "11.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/runtime": "^7.14.0",
+    "metro-react-native-babel-preset": "^0.66.0",
+    "react": "16.13.1",
+    "react-native": "0.63.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
