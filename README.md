@@ -1,12 +1,15 @@
-# longdo-map-react-native
-## Getting started (Expo)
-
-### Install & init project
+# Longdo Map Component for React Native 
+- [Setting Up (Expo)](getting-started-expo)
+- [Setting Up (Native)](-native)
+- [Getting Started](getting-started)
+- [Documentation](#documentation)
+## Setting Up (Expo)
+Install & init project
 ```
 npm install -g expo-cli
 expo init <project name>
 cd <project name>
-npm install MetamediaTechnology/longdo-map-react-native --save
+npm install --save longdo-map-react-native
 ```
 ### Config app.json
 ```
@@ -17,19 +20,36 @@ npm install MetamediaTechnology/longdo-map-react-native --save
       "package": "PACKAGE_NAME",
 ```
 Then, Register BUNDLE_ID, PACKAGE_NAME at https://map.longdo.com/api to obtain API_KEY
+
+## Setting Up (Native)
+Follow [React Native CLI Quickstart](https://reactnative.dev/docs/environment-setup) instruction and run
+```
+npm install --save longdo-map-react-native
+```
+### From app.json
+```
+{
+  "name": PROJECT_NAME,
+...
+```
+Register PROJECT_NAME at https://map.longdo.com/api to obtain API_KEY
+## Getting Started
 ### Add MapView in App.js
 ```
 import Longdo from 'longdo-map-react-native';
 ```
-in main App function
+In main App function
 ```
 Longdo.apiKey = 'API_KEY';
 ```
-under root View
+* If module fail to auto-detect app's bundle ID, add  
+  `Longdo.bundleId = 'REGISTERED_ID';`
+
+Under root View
 ```
 <Longdo.MapView />
 ```
-in StyleSheet
+In StyleSheet
 ```
 alignItems: 'stretch'
 ```
@@ -40,4 +60,5 @@ npm run ios
 npm run android
 ```
 ## Documentation
-- [Longdo Map API Documentation](https://map.longdo.com/docs/) (JavaScript)
+- [Reference](https://api.longdo.com/doc/react-native.php)
+- [JavaScript Documentation](https://map.longdo.com/docs/)

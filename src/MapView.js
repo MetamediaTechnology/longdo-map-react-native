@@ -11,7 +11,6 @@ export default class MapView extends Component {
     // ui
     // lastView
     language: '',
-    eop: true
   };
 
   // MARK: - Public fields
@@ -52,6 +51,11 @@ export default class MapView extends Component {
       let objectList = [];
 
       function init() {
+        const placeholder = document.getElementById('map');
+        if (!window.longdo) {
+          placeholder.innerHTML = 'Unregistered app: ` + Const.bundleId + `';
+          return;
+        }
         console.log = (message) => ReactNativeWebView.postMessage('{"$log":"' + message.replaceAll('"', '\\"') + '"}')
         onerror = (message, source, lineno, colno) => {
           console.log(message + ' @ ' + source + '#L' + lineno + ':' + colno);
@@ -67,7 +71,7 @@ export default class MapView extends Component {
           lastView: ` + this.props.lastView + `,
           language: '` + this.props.language  + `',
 
-          placeholder: document.getElementById('map')
+          placeholder: placeholder
         });
         for (const event of [` + events.substring(1) + `]) {
           try {
@@ -155,7 +159,7 @@ export default class MapView extends Component {
   
   call(method, ...args) {
     if (method == 'Event.bind' || method == 'Event.unbind') {
-      console.log('\x1B[35mMAP\x1B[0m', method + ' not supported');
+      Const.log(method + ' not supported');
       return;
     }
 
@@ -179,7 +183,7 @@ export default class MapView extends Component {
     if (data.$event) {
       this[data.$event](data.data);
     } else if (data.$log) {
-      console.log('\x1B[35mMAP\x1B[0m', data.$log);
+      Const.log(data.$log);
     } else {
       this.#callback(data);
     }
