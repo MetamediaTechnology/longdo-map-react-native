@@ -1,9 +1,11 @@
 {
   "name": "longdo-map-react-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Longdo Map component for React Native",
   "author": "TK <tanawat@mm.co.th>",
-  "private": true,
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/MetamediaTechnology/longdo-map-react-native#readme",
+  "repository": "github:MetamediaTechnology/longdo-map-react-native",
   "files": [
     "*",
     "!example"
@@ -24,5 +26,10 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "keywords": [
+    "longdo",
+    "map",
+    "react-native"
+  ]
 }

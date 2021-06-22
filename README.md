@@ -1,6 +1,9 @@
 # Longdo Map Component for React Native 
+![npm](https://img.shields.io/npm/v/longdo-map-react-native)
+![npm](https://img.shields.io/npm/dt/longdo-map-react-native)
+![npm](https://img.shields.io/npm/l/longdo-map-react-native)
 - [Setting Up (Expo)](#setting-up-expo)
-- [Setting Up (Native)](setting-up-native)
+- [Setting Up (Native)](#setting-up-native)
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
 ## Setting Up (Expo)
