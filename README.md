@@ -1,7 +1,7 @@
 # Longdo Map Component for React Native 
-- [Setting Up (Expo)](getting-started-expo)
-- [Setting Up (Native)](-native)
-- [Getting Started](getting-started)
+- [Setting Up (Expo)](#setting-up-expo)
+- [Setting Up (Native)](setting-up-native)
+- [Getting Started](#getting-started)
 - [Documentation](#documentation)
 ## Setting Up (Expo)
 Install & init project
@@ -60,5 +60,5 @@ npm run ios
 npm run android
 ```
 ## Documentation
-- [Reference](https://api.longdo.com/doc/react-native.php)
+- [Reference](https://api.longdo.com/map/doc/react-native.php)
 - [JavaScript Documentation](https://map.longdo.com/docs/)
