@@ -1,6 +1,6 @@
 {
   "name": "longdo-map-react-native",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Longdo Map component for React Native",
   "author": "TK <tanawat@mm.co.th>",
   "license": "Apache-2.0",
@@ -11,10 +11,11 @@
     "!example"
   ],
   "scripts": {
-    "sync": "rsync -r --include='index.js' --include='src/***' --exclude='*' . example/node_modules/longdo-map-react-native; touch example/App.js"
+    "sync": "rsync -r --include='index.js' --include='src/***' --exclude='*' . example/node_modules/longdo-map-react-native; touch example/App.js",
+    "merge": "git merge -X theirs --squash --allow-unrelated-histories main"
   },
   "dependencies": {
-    "react-native-webview": "11.2.3"
+    "react-native-webview": "^11.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

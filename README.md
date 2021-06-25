@@ -45,8 +45,7 @@ In main App function
 ```
 Longdo.apiKey = 'API_KEY';
 ```
-* If module fail to auto-detect app's bundle ID, add  
-  `Longdo.bundleId = 'REGISTERED_ID';`
+> If module fail to auto-detect app's bundle ID, add `Longdo.bundleId = 'REGISTERED_ID';`
 
 Under root View
 ```

@@ -73,6 +73,7 @@ export default class MapView extends Component {
 
           placeholder: placeholder
         });
+        map.Ui.Geolocation?.visible(false)
         for (const event of [` + events.substring(1) + `]) {
           try {
             map.Event.bind(event[2].toLocaleLowerCase() + event.substring(3),
