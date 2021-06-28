@@ -12,7 +12,7 @@ Install & init project
 npm install -g expo-cli
 expo init <project name>
 cd <project name>
-npm install --save longdo-map-react-native
+npm install longdo-map-react-native
 ```
 ### Config app.json
 ```
@@ -27,13 +27,11 @@ Then, Register BUNDLE_ID, PACKAGE_NAME at https://map.longdo.com/api to obtain A
 ## Setting Up (Native)
 Follow [React Native CLI Quickstart](https://reactnative.dev/docs/environment-setup) instruction and run
 ```
-npm install --save longdo-map-react-native
+npm install react-native-webview longdo-map-react-native
 ```
 ### From app.json
 ```
-{
   "name": PROJECT_NAME,
-...
 ```
 Register PROJECT_NAME at https://map.longdo.com/api to obtain API_KEY
 ## Getting Started
