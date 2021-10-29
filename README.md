@@ -28,6 +28,16 @@ Then, Register BUNDLE_ID, PACKAGE_NAME at https://map.longdo.com/api to obtain A
 Follow [React Native CLI Quickstart](https://reactnative.dev/docs/environment-setup) instruction and run
 ```
 npm install react-native-webview longdo-map-react-native
+npm install -D @babel/preset-env
+```
+### Config babel.config.js
+```
+module.exports = {
+  presets: [
+    'module:metro-react-native-babel-preset',
+    ['@babel/preset-env', { "targets": "iOS >= 11, Android >= 56" }],
+  ],
+}
 ```
 ### From app.json
 ```
@@ -59,6 +69,7 @@ For complete file, see [example/App.js](example/App.js)
 npm run ios
 npm run android
 ```
+Follow this [instruction](https://medium.com/@davidjasonharding/developing-a-react-native-app-on-an-m1-mac-without-rosetta-29fcc7314d70) to run on Mac M1
 ## Documentation
 - [Reference](https://api.longdo.com/map/doc/react-native.php)
-- [JavaScript Documentation](https://map.longdo.com/docs/)
+- [JavaScript documentation](https://map.longdo.com/docs/)
