@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 
 export let Const = {
-  server: 'api',
+  server: 'api.longdo.com/map3/',
   // bundleId
   // apiKey
   init: () => {

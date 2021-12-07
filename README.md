@@ -6,12 +6,14 @@
 - [Setting Up (Native)](#setting-up-native)
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
+- [Version](#version)
 ## Setting Up (Expo)
 Install & init project
 ```
 npm install -g expo-cli
 expo init <project name>
 cd <project name>
+expo install react-native-webview
 npm install longdo-map-react-native
 ```
 ### Config app.json
@@ -73,3 +75,6 @@ Follow this [instruction](https://medium.com/@davidjasonharding/developing-a-rea
 ## Documentation
 - [Reference](https://api.longdo.com/map/doc/react-native.php)
 - [JavaScript documentation](https://map.longdo.com/docs/)
+## Version
+- 3.x: Vector map GL backend
+- 1.x: Raster map backend

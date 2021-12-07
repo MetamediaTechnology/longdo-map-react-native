@@ -46,7 +46,7 @@ export default class MapView extends Component {
       body { height: 100%; margin: 0; padding: 0; font: 12px/1.2 sans-serif; }
       #map { width: 100%; height: 100%; }
     </style>
-    <script src="https://` + Const.server + '.longdo.com/map/?key=' + Const.apiKey + `"></script>
+    <script src="https://` + Const.server + '?key=' + Const.apiKey + `"></script>
     <script>
       let objectList = [];
 
