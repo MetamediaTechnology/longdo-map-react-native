@@ -46,14 +46,14 @@ export default class MapView extends Component {
       body { height: 100%; margin: 0; padding: 0; font: 12px/1.2 sans-serif; }
       #map { width: 100%; height: 100%; }
     </style>
-    <script src="https://` + Const.server + '?key=' + Const.apiKey + `"></script>
+    <script src="https://${Const.server}?key=${Const.apiKey}"></script>
     <script>
       let objectList = [];
 
       function init() {
         const placeholder = document.getElementById('map');
         if (!window.longdo) {
-          placeholder.innerHTML = 'Unregistered app: ` + Const.bundleId + `';
+          placeholder.innerHTML = 'Unregistered app: ${Const.bundleId}';
           return;
         }
         console.log = (message) => ReactNativeWebView.postMessage('{"$log":"' + message.replaceAll('"', '\\"') + '"}')
@@ -63,18 +63,17 @@ export default class MapView extends Component {
         };
         
         const map = new longdo.Map({
-          layer: parse(` + JSON.stringify(this.props.layer) + `),
-          zoom: ` + this.props.zoom + `,
-          zoomRange: ` + JSON.stringify(this.props.zoomRange) + `,
-          location: ` + JSON.stringify(this.props.location) + `,
-          ui: ` + this.props.ui + `,
-          lastView: ` + this.props.lastView + `,
-          language: '` + this.props.language  + `',
-
+          layer: parse(${JSON.stringify(this.props.layer)}),
+          zoom: ${this.props.zoom},
+          zoomRange: ${JSON.stringify(this.props.zoomRange)},
+          location: ${JSON.stringify(this.props.location)},
+          ui: ${this.props.ui},
+          lastView: ${this.props.lastView},
+          language: '${this.props.language }',
           placeholder: placeholder
         });
-        map.Ui.Geolocation?.visible(false)
-        for (const event of [` + events.substring(1) + `]) {
+        map.Ui.Geolocation?.visible(false);
+        for (const event of [${events.substring(1)}]) {
           try {
             map.Event.bind(event[2].toLocaleLowerCase() + event.substring(3),
               data => ReactNativeWebView.postMessage(JSON.stringify({ $event: event, data: serialize(data) })));
@@ -90,11 +89,11 @@ export default class MapView extends Component {
         if (!data) return data;
         if (data.$static) return longdo[data.$static][data.name];
         if (data.$object) {
-          let object = objectList[data.$id]
+          let object = objectList[data.$id];
           if (!object) {
             object = new longdo[data.$object](...data.args.map(parse));
             object.$id = data.$id;
-            objectList[data.$id] = object
+            objectList[data.$id] = object;
           }
           return object;
         }
@@ -107,7 +106,7 @@ export default class MapView extends Component {
         if (object.$id) return { $object: true, $id: object.$id };
         if (object.active) return { $object: null };
 
-        if (typeof object[Symbol.iterator] == 'function') {
+        if (Array.isArray(object)) {
           for (let i = 0; i < object.length; ++i) {
             object[i] = serialize(object[i]);
           }
