@@ -53,7 +53,9 @@ export default class MapView extends Component {
       function init() {
         const placeholder = document.getElementById('map');
         if (!window.longdo) {
-          placeholder.innerHTML = 'Unregistered app: ${Const.bundleId}';
+          placeholder.innerHTML = navigator.onLine
+            ? '<h4>UNREGISTERED APP</h4><strong>ID</strong>: ${Const.bundleId}<br><strong>KEY</strong>: ${Const.apiKey.substring(0, 8)}...'
+            : 'Not connected to network';
           return;
         }
         console.log = (message) => ReactNativeWebView.postMessage('{"$log":"' + message.replaceAll('"', '\\"') + '"}')

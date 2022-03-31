@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Button, SafeAreaView } from 'react-native';
-import Longdo from 'longdo-map-react-native'
+import Longdo from 'longdo-map-react-native';
 
 export default function App() {
   Longdo.apiKey = 'fortestonlydonotuseinproduction!';
