@@ -99,6 +99,16 @@ export default class MapView extends Component {
           }
           return object;
         }
+        if (Array.isArray(data)) {
+          return data.map(parse);
+        }
+        if (typeof(data) === 'object') {
+          let object = {};
+          for (i in data) {
+            object[i] = parse(data[i]);
+          }
+          return object;
+        }
 
         return data;
       }
