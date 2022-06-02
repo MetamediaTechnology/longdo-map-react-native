@@ -128,11 +128,18 @@ export default class MapView extends Component {
       }
 
       function call(method, args) {
-        let dot = method.indexOf('.');
+        const dot = method.indexOf('.');
         if (dot < 0) {
           commit(objectList[0], method, args);
         } else {
-          commit(objectList[0][method.substring(0, dot)], method.substring(dot + 1), args);
+          const secondDot = method.substring(dot + 1).indexOf('.');
+          if (secondDot < 0) {
+            commit(objectList[0][method.substring(0, dot)], method.substring(dot + 1), args);
+          }
+          else {
+            const subMethod = method.substring(dot + 1);
+            commit(objectList[0][method.substring(0, dot)][subMethod.substring(0, secondDot)], subMethod.substring(secondDot + 1), args);
+          }
         }
       }
 
