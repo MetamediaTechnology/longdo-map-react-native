@@ -99,7 +99,12 @@ export default class MapView extends Component {
         if (data.$object) {
           let object = objectList[data.$id];
           if (!object) {
-            object = new longdo[data.$object](...data.args.map(parse));
+            let dot = data.$object.indexOf('.');
+            if (dot < 0) {
+              object = new longdo[data.$object](...data.args.map(parse));
+            } else {
+              object = new longdo[data.$object.substring(0, dot)][data.$object.substring(dot + 1)](...data.args.map(parse));
+            }
             object.$id = data.$id;
             objectList[data.$id] = object;
           }
