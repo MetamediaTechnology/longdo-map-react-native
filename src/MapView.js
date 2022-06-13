@@ -89,7 +89,13 @@ export default class MapView extends Component {
 
       function parse(data) {
         if (!data) return data;
-        if (data.$static) return longdo[data.$static][data.name];
+        if (data.$static) {
+          let value = longdo[data.$static][data.name];
+          if (!value) {
+            console.log('warning: ' + data.$static + '.' + data.name + ' is undefined.');
+          }
+          return value;
+        }
         if (data.$object) {
           let object = objectList[data.$id];
           if (!object) {
@@ -151,7 +157,7 @@ export default class MapView extends Component {
         if (executor && executor[method]) {
           ReactNativeWebView.postMessage(JSON.stringify(serialize(executor[method](...JSON.parse(args).map(parse)))));
         } else {
-          console.log(method + ' not found');
+          console.log('Method ' + method + ' not found.');
         }
       }
 
@@ -178,7 +184,7 @@ export default class MapView extends Component {
   
   call(method, ...args) {
     if (method == 'Event.bind' || method == 'Event.unbind') {
-      Const.log(method + ' not supported');
+      Const.log('Method ' + method + ' not supported.');
       return;
     }
 
