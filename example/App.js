@@ -11,7 +11,7 @@ export default function App() {
 
   function onReady() {
     console.log('ready ' + new Date());
-    map.call('Overlays.load', Longdo.object('OverlaysObject', 'A00146852', 'LONGDO'));
+    map.call('Overlays.load', Longdo.object('Overlays.Object', 'A00146852', 'LONGDO'));
   }
 
   function onOverlayClick(data) {

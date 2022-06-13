@@ -20,7 +20,7 @@ export default class MapView extends Component {
   // MARK: - Private fields
 
   #web;
-  #baseUrl = 'http://' + Const.bundleId.toLowerCase() + '/';
+  #baseUrl = `http://${Const.bundleId.toLowerCase()}/`;
   #callback;
 
   // MARK: - Public methods
@@ -29,7 +29,7 @@ export default class MapView extends Component {
     let events = '';
     for (const prop in this.props) {
       if (prop[0] == 'o' && prop[1] == 'n') {
-        events += ',"' + prop + '"';
+        events += `,"${prop}"`;
         this[prop] = this.props[prop];
       }
     }
@@ -48,7 +48,7 @@ export default class MapView extends Component {
     </style>
     <script src="https://${Const.server}?key=${Const.apiKey}"></script>
     <script>
-      let objectList = [];
+      const objectList = [];
 
       function init() {
         const placeholder = document.getElementById('map');
@@ -90,37 +90,35 @@ export default class MapView extends Component {
       function parse(data) {
         if (!data) return data;
         if (data.$static) {
-          let value = longdo[data.$static][data.name];
+          const value = longdo[data.$static]?.[data.name]
           if (!value) {
-            console.log('warning: ' + data.$static + '.' + data.name + ' is undefined.');
+            console.log(data.$static + '.' + data.name + ' is undefined');
           }
-          return value;
+          return value
         }
         if (data.$object) {
           let object = objectList[data.$id];
           if (!object) {
-            let dot = data.$object.indexOf('.');
-            if (dot < 0) {
-              object = new longdo[data.$object](...data.args.map(parse));
+            const dot = data.$object.indexOf('.');
+            const objectType = dot < 0
+              ? longdo[data.$object]
+              : longdo[data.$object.substring(0, dot)]?.[data.$object.substring(dot + 1)]
+            if (objectType) {
+              object = new objectType(...data.args.map(parse));
+              object.$id = data.$id;
+              objectList[data.$id] = object;
             } else {
-              object = new longdo[data.$object.substring(0, dot)][data.$object.substring(dot + 1)](...data.args.map(parse));
+              console.log(data.$object + ' not found');
             }
-            object.$id = data.$id;
-            objectList[data.$id] = object;
           }
           return object;
         }
-        if (Array.isArray(data)) {
-          return data.map(parse);
-        }
-        if (typeof(data) === 'object') {
-          let object = {};
-          for (i in data) {
-            object[i] = parse(data[i]);
+        if (Array.isArray(data)) return data.map(parse);
+        if (typeof data === 'object') {
+          for (key in data) {
+            data[key] = parse(data[key]);
           }
-          return object;
         }
-
         return data;
       }
 
@@ -128,13 +126,8 @@ export default class MapView extends Component {
         if (!object) return object;
         if (object.$id) return { $object: true, $id: object.$id };
         if (object.active) return { $object: null };
-
-        if (Array.isArray(object)) {
-          for (let i = 0; i < object.length; ++i) {
-            object[i] = serialize(object[i]);
-          }
-        }
-
+        // TODO: register to objectList & inc objectcount in RN side
+        if (Array.isArray(object)) return object.map(serialize);
         return object;
       }
 
@@ -143,13 +136,12 @@ export default class MapView extends Component {
         if (dot < 0) {
           commit(objectList[0], method, args);
         } else {
-          const secondDot = method.substring(dot + 1).indexOf('.');
-          if (secondDot < 0) {
-            commit(objectList[0][method.substring(0, dot)], method.substring(dot + 1), args);
-          }
-          else {
-            const subMethod = method.substring(dot + 1);
-            commit(objectList[0][method.substring(0, dot)][subMethod.substring(0, secondDot)], subMethod.substring(secondDot + 1), args);
+          const executor = objectList[0][method.substring(0, dot)]
+          const dot2 = method.indexOf('.', dot + 1);
+          if (dot2 < 0) {
+            commit(executor, method.substring(dot + 1), args);
+          } else {
+            commit(executor?.[method.substring(dot + 1, dot2)], method.substring(dot2 + 1), args);
           }
         }
       }
@@ -159,10 +151,10 @@ export default class MapView extends Component {
       }
 
       function commit(executor, method, args) {
-        if (executor && executor[method]) {
+        if (executor?.[method]) {
           ReactNativeWebView.postMessage(JSON.stringify(serialize(executor[method](...JSON.parse(args).map(parse)))));
         } else {
-          console.log('Method ' + method + ' not found.');
+          console.log(method + ' not found');
         }
       }
 
@@ -189,20 +181,20 @@ export default class MapView extends Component {
   
   call(method, ...args) {
     if (method == 'Event.bind' || method == 'Event.unbind') {
-      Const.log('Method ' + method + ' not supported.');
+      Const.log(method + ' not supported');
       return;
     }
 
     return new Promise(resolve => {
       this.#callback = resolve;
-      this.#web.injectJavaScript('call("' + method + '", `' + JSON.stringify(args) + '`)');
+      this.#web.injectJavaScript(`call("${method}", "${this.#escape(args)}")`);
     });
   }
 
   objectCall(object, method, ...args) {
     return new Promise(resolve => {
       this.#callback = resolve;
-      this.#web.injectJavaScript('objectCall(`' + JSON.stringify(object) + '`, "' + method + '", `' + JSON.stringify(args) + '`)');
+      this.#web.injectJavaScript(`objectCall("${this.#escape(object)}", "${method}", "${this.#escape(args)}")`);
     });
   }
 
@@ -217,5 +209,9 @@ export default class MapView extends Component {
     } else {
       this.#callback(data);
     }
+  }
+
+  #escape(data) {
+    return JSON.stringify(data).replaceAll('\\"', '\\\\"').replaceAll('\"', '\\"')
   }
 }

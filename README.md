@@ -73,7 +73,8 @@ npm run android
 ```
 Follow this [instruction](https://medium.com/@davidjasonharding/developing-a-react-native-app-on-an-m1-mac-without-rosetta-29fcc7314d70) to run on Mac M1
 ## Documentation
-- [Reference](https://api.longdo.com/map/doc/react-native.php)
+- [Reference 3.x](https://github.com/MetamediaTechnology/longdo-map-react-native/wiki/)
+- [Reference 1.x](https://api.longdo.com/map/doc/react-native.php)
 - [JavaScript documentation](https://map.longdo.com/docs/)
 ## Version
 - 3.x: Vector map GL backend
