@@ -83,6 +83,7 @@ export default class MapView extends Component {
             console.log(e);
           }
         }
+        map.Util = longdo.Util;
         map.toJSON = map.Overlays.toJSON = map.Ui.toJSON = () => ({});
         objectList[0] = map;
       }
@@ -102,7 +103,7 @@ export default class MapView extends Component {
             const dot = data.$object.indexOf('.');
             const objectType = dot < 0
               ? longdo[data.$object]
-              : longdo[data.$object.substring(0, dot)]?.[data.$object.substring(dot + 1)]
+              : longdo[data.$object.substring(0, dot)]?.[data.$object.substring(dot + 1)];
             if (objectType) {
               object = new objectType(...data.args.map(parse));
               object.$id = data.$id;
@@ -136,7 +137,7 @@ export default class MapView extends Component {
         if (dot < 0) {
           commit(objectList[0], method, args);
         } else {
-          const executor = objectList[0][method.substring(0, dot)]
+          const executor = objectList[0][method.substring(0, dot)];
           const dot2 = method.indexOf('.', dot + 1);
           if (dot2 < 0) {
             commit(executor, method.substring(dot + 1), args);
@@ -152,12 +153,25 @@ export default class MapView extends Component {
 
       function commit(executor, method, args) {
         if (executor?.[method]) {
-          ReactNativeWebView.postMessage(JSON.stringify(serialize(executor[method](...JSON.parse(args).map(parse)))));
+          const result = executor[method](...JSON.parse(args).map(parse));
+          if (result instanceof Promise) {
+            result.then(callback);
+          } else {
+            callback(result);
+          }
         } else {
           console.log(method + ' not found');
         }
       }
 
+      function callback(result) {
+        try {
+          result = JSON.stringify(serialize(result));
+        } catch (e) {
+          result = '{}';
+        }
+        ReactNativeWebView.postMessage(result);
+      }
     </script>
   </head>
   <body onload="init();">
