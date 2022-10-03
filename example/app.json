@@ -22,6 +22,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "th.co.mm.MapRN",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

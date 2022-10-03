@@ -16,6 +16,15 @@ cd <project name>
 expo install react-native-webview
 npm install longdo-map-react-native
 ```
+### Config babel.config.js
+```
+module.exports = {
+  presets: [
+    'babel-preset-expo',
+    ['@babel/preset-env', { "targets": "iOS >= 11, Android >= 56" }],
+  ],
+}
+```
 ### Config app.json
 ```
     "ios": {

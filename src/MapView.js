@@ -226,6 +226,7 @@ export default class MapView extends Component {
   }
 
   #escape(data) {
-    return JSON.stringify(data).replaceAll('\\"', '\\\\"').replaceAll('\"', '\\"')
+    // Android expo: replaceAll is not a function
+    return JSON.stringify(data).replace(/\\"/g, '\\\\"').replace(/\"/g, '\\"')
   }
 }

@@ -66,5 +66,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // alignItems: 'center', // center not working, use stretch (default value)
     justifyContent: 'center',
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
 });
