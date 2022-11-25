@@ -20,7 +20,7 @@ export default class MapView extends Component {
   // MARK: - Private fields
 
   #web;
-  #baseUrl = `http://${Const.bundleId.toLowerCase()}/`;
+  #baseUrl = `https://${Const.bundleId.toLowerCase()}/`;
   #callback;
 
   // MARK: - Public methods
@@ -59,10 +59,7 @@ export default class MapView extends Component {
           return;
         }
         console.log = (message) => ReactNativeWebView.postMessage('{"$log":"' + message.replaceAll('"', '\\"') + '"}')
-        onerror = (message, source, lineno, colno) => {
-          console.log(message + ' @ ' + source + '#L' + lineno + ':' + colno);
-          return true;
-        };
+        onerror = (message, source, lineno, colno) => console.log(message + ' @ ' + source + '#L' + lineno + ':' + colno);
         
         const map = new longdo.Map({
           layer: parse(${JSON.stringify(this.props.layer)}),
@@ -126,8 +123,11 @@ export default class MapView extends Component {
       function serialize(object) {
         if (!object) return object;
         if (object.$id) return { $object: true, $id: object.$id };
-        if (object.active) return { $object: null };
-        // TODO: register to objectList & inc objectcount in RN side
+        if (object.active) {
+          object.$id = objectList.length;
+          objectList.push(object);
+          return { $object: 'wait', $id: object.$id };
+        }
         if (Array.isArray(object)) return object.map(serialize);
         return object;
       }
@@ -171,6 +171,12 @@ export default class MapView extends Component {
           result = '{}';
         }
         ReactNativeWebView.postMessage(result);
+      }
+
+      function moveObject(from, to) {
+        objectList[from].$id = to;
+        objectList[to] = objectList[from];
+        delete objectList[from];
       }
     </script>
   </head>
@@ -221,12 +227,20 @@ export default class MapView extends Component {
     } else if (data.$log) {
       Const.log(data.$log);
     } else {
+      if (data.$object == 'wait') {
+        if (++Const.objectcount == data.$id) {
+          data.$object = true;
+        } else {
+          this.#web.injectJavaScript(`moveObject(${data.$id}, ${Const.objectcount})`);
+          data.$id = Const.objectcount;
+        }
+      }
       this.#callback(data);
     }
   }
 
   #escape(data) {
     // Android expo: replaceAll is not a function
-    return JSON.stringify(data).replace(/\\"/g, '\\\\"').replace(/\"/g, '\\"')
+    return JSON.stringify(data).replace(/\\/g, '\\\\').replace(/\"/g, '\\"')
   }
 }

@@ -26,5 +26,6 @@ export let Const = {
   },
   log: (...messages) => {
     console.log('\x1B[35mMAP\x1B[0m', ...messages);
-  }
+  },
+  objectcount: 0
 };

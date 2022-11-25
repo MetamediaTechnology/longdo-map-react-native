@@ -18,12 +18,10 @@ npm install longdo-map-react-native
 ```
 ### Config babel.config.js
 ```
-module.exports = {
-  presets: [
-    'babel-preset-expo',
-    ['@babel/preset-env', { "targets": "iOS >= 11, Android >= 56" }],
-  ],
-}
+    presets: [
+      'babel-preset-expo',
+      ['@babel/preset-env', { "targets": "iOS >= 11, Android >= 56" }],
+    ],
 ```
 ### Config app.json
 ```
@@ -43,12 +41,10 @@ npm install -D @babel/preset-env
 ```
 ### Config babel.config.js
 ```
-module.exports = {
   presets: [
     'module:metro-react-native-babel-preset',
     ['@babel/preset-env', { "targets": "iOS >= 11, Android >= 56" }],
   ],
-}
 ```
 ### From app.json
 ```
