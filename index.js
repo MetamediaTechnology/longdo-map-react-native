@@ -7,6 +7,7 @@ const Longdo = {
   set apiKey(value) { Const.apiKey = value },
   static: (type, name) => ({ $static: type, name: name }),
   object: (type, ...args) => ({ $object: type, $id: ++Const.objectcount, args: args }),
+  function: (detail) => ({ $function: detail }),
   isSameObject: (a, b) => a.$id == b.$id,
   MapView: MapView
 };

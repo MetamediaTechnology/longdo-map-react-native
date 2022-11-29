@@ -48,6 +48,7 @@ export default class MapView extends Component {
     </style>
     <script src="https://${Const.server}?key=${Const.apiKey}"></script>
     <script>
+      let map;
       const objectList = [];
 
       function init() {
@@ -61,12 +62,12 @@ export default class MapView extends Component {
         console.log = (message) => ReactNativeWebView.postMessage('{"$log":"' + message.replaceAll('"', '\\"') + '"}')
         onerror = (message, source, lineno, colno) => console.log(message + ' @ ' + source + '#L' + lineno + ':' + colno);
         
-        const map = new longdo.Map({
+        map = new longdo.Map({
           layer: parse(${JSON.stringify(this.props.layer)}),
           zoom: ${this.props.zoom},
           zoomRange: ${JSON.stringify(this.props.zoomRange)},
           location: ${JSON.stringify(this.props.location)},
-          ui: ${this.props.ui},
+          ui: parse(${JSON.stringify(this.props.ui)}),
           lastView: ${this.props.lastView},
           language: '${this.props.language }',
           placeholder: placeholder
@@ -82,17 +83,15 @@ export default class MapView extends Component {
         }
         map.Util = longdo.Util;
         map.toJSON = map.Overlays.toJSON = map.Ui.toJSON = () => ({});
-        objectList[0] = map;
       }
 
       function parse(data) {
         if (!data) return data;
         if (data.$static) {
-          const value = longdo[data.$static]?.[data.name]
-          if (!value) {
-            console.log(data.$static + '.' + data.name + ' is undefined');
-          }
-          return value
+          const value = longdo[data.$static]?.[data.name];
+          if (value !== undefined) return value;
+          
+          console.log(data.$static + '.' + data.name + ' is undefined');
         }
         if (data.$object) {
           let object = objectList[data.$id];
@@ -106,11 +105,12 @@ export default class MapView extends Component {
               object.$id = data.$id;
               objectList[data.$id] = object;
             } else {
-              console.log(data.$object + ' not found');
+              console.log(data.$object + ' is undefined');
             }
           }
           return object;
         }
+        if (data.$function) return eval(data.$function);
         if (Array.isArray(data)) return data.map(parse);
         if (typeof data === 'object') {
           for (key in data) {
@@ -135,9 +135,9 @@ export default class MapView extends Component {
       function call(method, args) {
         const dot = method.indexOf('.');
         if (dot < 0) {
-          commit(objectList[0], method, args);
+          commit(map, method, args);
         } else {
-          const executor = objectList[0][method.substring(0, dot)];
+          const executor = map[method.substring(0, dot)];
           const dot2 = method.indexOf('.', dot + 1);
           if (dot2 < 0) {
             commit(executor, method.substring(dot + 1), args);
@@ -198,7 +198,7 @@ export default class MapView extends Component {
       />
     );
   }
-  
+
   call(method, ...args) {
     if (method == 'Event.bind' || method == 'Event.unbind') {
       Const.log(method + ' not supported');
@@ -216,6 +216,10 @@ export default class MapView extends Component {
       this.#callback = resolve;
       this.#web.injectJavaScript(`objectCall("${this.#escape(object)}", "${method}", "${this.#escape(args)}")`);
     });
+  }
+
+  run(script) {
+    this.#web.injectJavaScript(script);
   }
 
   // MARK: - Private methods
